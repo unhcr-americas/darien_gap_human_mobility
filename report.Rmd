@@ -1,6 +1,6 @@
 ---
 title: "Darien montlhy report"
-subtitle: "`r lubridate::month(lubridate::today(), label = TRUE, abbr = FALSE)`"
+subtitle: "`r lubridate::month(lubridate::today() - months(1), label = TRUE, abbr = FALSE)`"
 date: "Regional Bureau for the Americas"
 output: 
   pagedown::html_paged:
@@ -9,7 +9,6 @@ output:
     back_cover: unhcr-backcover.svg
     toc: false
     number_sections: false
-
 ---
 
 
