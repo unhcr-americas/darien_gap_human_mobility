@@ -5,3 +5,5 @@
 report
 graph
 *.csv
+deprecated
+report.html
