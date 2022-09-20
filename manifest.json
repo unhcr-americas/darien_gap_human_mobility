@@ -4,7 +4,7 @@
   "platform": "4.2.1",
   "metadata": {
     "appmode": "rmd-static",
-    "primary_rmd": "deprecated/report/darien_ppt.Rmd",
+    "primary_rmd": "report.Rmd",
     "primary_html": null,
     "content_category": null,
     "has_parameters": false
@@ -5618,7 +5618,7 @@
       "checksum": "8ac6bb2eb2a54c19954d26c964486770"
     },
     "R/0_dadosabiertos_to_ridl.R": {
-      "checksum": "85d9fcbdc9453df6b95abd9602d9ae20"
+      "checksum": "bf230202b8b8f48f87fbdada6cb407fe"
     },
     "R/wrangle_data_to_ridl_2010-2021.R": {
       "checksum": "30e7a968ded4889c7eb8b79dac3e133c"
