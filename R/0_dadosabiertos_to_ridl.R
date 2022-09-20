@@ -1,6 +1,6 @@
 # send to RIDL ------------------------------------------------------------
 # usethis::edit_r_environ() and adding the line RIDL_API_KEY=xxxxx
-#### 
+# rsconnect::writeManifest(appPrimaryDoc = "report.Rmd")
 
 
 if(!require(devtools)) install.packages("devtools")
