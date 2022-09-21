@@ -43,26 +43,37 @@ download <- RCurl::getURL('https://www.datosabiertos.gob.pa/dataset/142da25e-235
 download <-
   gsub(pattern = "\\s{5,}", 
        replacement = if (stringr::str_count(download, ";") > stringr::str_count(download, ","))
-                            ';'
-                     else ',',
-                     download
-       )
+         ';'
+       else ',',
+       download
+  )
 
 # Fix empty column in between numbers
 download <-
-  gsub(pattern = "[A-z 0-9];{2}[A-z 0-9]", 
+  gsub(pattern = "([A-z 0-9]);{2}([A-z 0-9])", 
        replacement = if (stringr::str_count(download, ";") > stringr::str_count(download, ","))
-         ';'
+         '\\1;\\2'
        else download,
        download
   )
+
 download <-
-  gsub(pattern = "[A-z 0-9],{2}[A-z 0-9]", 
+  gsub(pattern = "([A-z 0-9]),{2}([A-z 0-9])", 
        replacement = if (stringr::str_count(download, ",") > stringr::str_count(download, ";"))
-         ','
+         '\\1,\\2'
        else download,
        download
   )
+
+# fix thousand separator
+download <-
+  gsub(pattern = "([0-9 ;]),{1}([; 0-9])", 
+       replacement = if (stringr::str_count(download, ";") > stringr::str_count(download, ","))
+         '\\1\\2'
+       else download,
+       download
+  )
+
 
 # read csv with ; or , separator
 download <- if (ncol(read_csv(download, skip = 1))<=5) read_csv2(download, skip = 2) else read_csv(download, skip = 2)
@@ -108,7 +119,6 @@ last_month_exist_datosabiertos_gender <- df_gender_2022 |>
 
 download <- RCurl::getURL('https://www.datosabiertos.gob.pa/dataset/ebb56d40-112f-455e-9418-ccd73560021d/resource/2979120d-b696-470f-9c8b-8bdbaa63477c/download')
 
-
 # replace whitespace with delimiter according to delimiter type
 download <-
   gsub(pattern = "\\s{5,}", 
@@ -120,16 +130,26 @@ download <-
 
 # Fix empty column in between numbers
 download <-
-  gsub(pattern = "[A-z 0-9];{2}[A-z 0-9]", 
+  gsub(pattern = "([A-z 0-9]);{2}([A-z 0-9])", 
        replacement = if (stringr::str_count(download, ";") > stringr::str_count(download, ","))
-         ';'
+         '\\1;\\2'
        else download,
        download
   )
+
 download <-
-  gsub(pattern = "[A-z 0-9],{2}[A-z 0-9]", 
+  gsub(pattern = "([A-z 0-9]),{2}([A-z 0-9])", 
        replacement = if (stringr::str_count(download, ",") > stringr::str_count(download, ";"))
-         ','
+         '\\1,\\2'
+       else download,
+       download
+  )
+
+# fix thousand separator
+download <-
+  gsub(pattern = "([0-9 ;]),{1}([; 0-9])", 
+       replacement = if (stringr::str_count(download, ";") > stringr::str_count(download, ","))
+         '\\1\\2'
        else download,
        download
   )
@@ -180,7 +200,6 @@ last_month_exist_datosabiertos_country <- df_country_2022 |>
 
 download <- RCurl::getURL('https://www.datosabiertos.gob.pa/dataset/45fa3980-ad6e-4411-8d06-e3af88835ddd/resource/2f75a23c-cd7f-4ca3-96d6-d4142ca66cdc/download')
 
-
 # replace whitespace with delimiter according to delimiter type
 download <-
   gsub(pattern = "\\s{5,}", 
@@ -192,19 +211,30 @@ download <-
 
 # Fix empty column in between numbers
 download <-
-  gsub(pattern = "[A-z 0-9];{2}[A-z 0-9]", 
+  gsub(pattern = "([A-z 0-9]);{2}([A-z 0-9])", 
        replacement = if (stringr::str_count(download, ";") > stringr::str_count(download, ","))
-         ';'
+         '\\1;\\2'
        else download,
        download
   )
+
 download <-
-  gsub(pattern = "[A-z 0-9],{2}[A-z 0-9]", 
+  gsub(pattern = "([A-z 0-9]),{2}([A-z 0-9])", 
        replacement = if (stringr::str_count(download, ",") > stringr::str_count(download, ";"))
-         ','
+         '\\1,\\2'
        else download,
        download
   )
+
+# fix thousand separator
+download <-
+  gsub(pattern = "([0-9 ;]),{1}([; 0-9])", 
+       replacement = if (stringr::str_count(download, ";") > stringr::str_count(download, ","))
+         '\\1\\2'
+       else download,
+       download
+  )
+
 
 # read csv with ; or , separator
 download <- if (ncol(read_csv(download, skip = 1))<=5) read_csv2(download, skip = 1) else read_csv(download, skip = 1)

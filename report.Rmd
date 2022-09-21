@@ -142,16 +142,26 @@ download <-
 
 # Fix empty column in between numbers
 download <-
-  gsub(pattern = "[A-z 0-9];{2}[A-z 0-9]", 
+  gsub(pattern = "([A-z 0-9]);{2}([A-z 0-9])", 
        replacement = if (stringr::str_count(download, ";") > stringr::str_count(download, ","))
-         ';'
+         '\\1;\\2'
        else download,
        download
   )
+
 download <-
-  gsub(pattern = "[A-z 0-9],{2}[A-z 0-9]", 
+  gsub(pattern = "([A-z 0-9]),{2}([A-z 0-9])", 
        replacement = if (stringr::str_count(download, ",") > stringr::str_count(download, ";"))
-         ','
+         '\\1,\\2'
+       else download,
+       download
+  )
+
+# fix thousand separator
+download <-
+  gsub(pattern = "([0-9 ;]),{1}([; 0-9])", 
+       replacement = if (stringr::str_count(download, ";") > stringr::str_count(download, ","))
+         '\\1\\2'
        else download,
        download
   )
@@ -402,6 +412,7 @@ cols_poptype <- c("Venezuela" = "#044F85",
                   "Cuba" = "#589BE5",
                   "Brasil"= '#8EBEFF',
                   "Chile" = "#DCE9FF",
+                  'Ecuador' = '#8395B9',
                   "Other nationalities" = "#666666"
 )
 
@@ -419,6 +430,7 @@ ggplot(df) +
             show.legend = FALSE,
             size = 4) +
   scale_color_manual(values = c("#FFFFFF", "#FFFFFF",
+                                "#FFFFFF", "#FFFFFF",
                                 "#FFFFFF", "#FFFFFF",
                                 "#FFFFFF", "#FFFFFF")) +
   scale_fill_manual(values = cols_poptype) +
