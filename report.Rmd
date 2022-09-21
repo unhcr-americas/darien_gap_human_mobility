@@ -40,12 +40,12 @@ last_month_not_exist_ridl_age <- resource_fetch('https://ridl.unhcr.org/dataset/
   filter(month_eng %in% previous_month) |> 
   nrow() == 0
 
-last_month_not_exist_ridl_gender <- resource_fetch('https://ridl.unhcr.org/dataset/3c1b0da2-ea18-4274-9de6-f5ed1fd53013/resource/e66cfaf1-2434-4c25-8256-93878b1dd21a/download/df_gender_2022.csv') |> 
+last_month_not_exist_ridl_gender <- resource_fetch('https://ridl.unhcr.org/dataset/3c1b0da2-ea18-4274-9de6-f5ed1fd53013/resource/6e53f9fe-a3a5-4277-9e37-3085e506a261/download/df_gender_2022.csv') |> 
   read_csv() |> 
   filter(month_eng %in% previous_month) |> 
   nrow() == 0
 
-last_month_not_exist_ridl_country <- resource_fetch('https://ridl.unhcr.org/dataset/5740d920-ba0b-4347-833a-743e8dce3bfe/resource/9c9ab11c-7fd6-4119-87a1-a09ee7f1b5ad/download/df_country_2022.csv') |> 
+last_month_not_exist_ridl_country <- resource_fetch('https://ridl.unhcr.org/dataset/panama-irregular-entries-through-darien-by-country/resource/22e70fa1-efc1-4588-b324-f23f1bac14ee/download/df_country_2022.csv') |> 
   read_csv() |> 
   filter(month_eng %in% previous_month) |> 
   nrow() == 0
@@ -65,26 +65,37 @@ download <- RCurl::getURL('https://www.datosabiertos.gob.pa/dataset/142da25e-235
 download <-
   gsub(pattern = "\\s{5,}", 
        replacement = if (stringr::str_count(download, ";") > stringr::str_count(download, ","))
-                            ';'
-                     else ',',
-                     download
-       )
+         ';'
+       else ',',
+       download
+  )
 
 # Fix empty column in between numbers
 download <-
-  gsub(pattern = "[A-z 0-9];{2}[A-z 0-9]", 
+  gsub(pattern = "([A-z 0-9]);{2}([A-z 0-9])", 
        replacement = if (stringr::str_count(download, ";") > stringr::str_count(download, ","))
-         ';'
+         '\\1;\\2'
        else download,
        download
   )
+
 download <-
-  gsub(pattern = "[A-z 0-9],{2}[A-z 0-9]", 
+  gsub(pattern = "([A-z 0-9]),{2}([A-z 0-9])", 
        replacement = if (stringr::str_count(download, ",") > stringr::str_count(download, ";"))
-         ','
+         '\\1,\\2'
        else download,
        download
   )
+
+# fix thousand separator
+download <-
+  gsub(pattern = "([0-9 ;]),{1}([; 0-9])", 
+       replacement = if (stringr::str_count(download, ";") > stringr::str_count(download, ","))
+         '\\1\\2'
+       else download,
+       download
+  )
+
 
 # read csv with ; or , separator
 download <- if (ncol(read_csv(download, skip = 1))<=5) read_csv2(download, skip = 2) else read_csv(download, skip = 2)
@@ -166,6 +177,7 @@ download <-
        download
   )
 
+
 # read csv with ; or , separator
 download <- if (ncol(read_csv(download, skip = 1))<=5) read_csv2(download, skip = 1) else read_csv(download, skip = 1)
 
@@ -224,19 +236,30 @@ download <-
 
 # Fix empty column in between numbers
 download <-
-  gsub(pattern = "[A-z 0-9];{2}[A-z 0-9]", 
+  gsub(pattern = "([A-z 0-9]);{2}([A-z 0-9])", 
        replacement = if (stringr::str_count(download, ";") > stringr::str_count(download, ","))
-         ';'
+         '\\1;\\2'
        else download,
        download
   )
+
 download <-
-  gsub(pattern = "[A-z 0-9],{2}[A-z 0-9]", 
+  gsub(pattern = "([A-z 0-9]),{2}([A-z 0-9])", 
        replacement = if (stringr::str_count(download, ",") > stringr::str_count(download, ";"))
-         ','
+         '\\1,\\2'
        else download,
        download
   )
+
+# fix thousand separator
+download <-
+  gsub(pattern = "([0-9 ;]),{1}([; 0-9])", 
+       replacement = if (stringr::str_count(download, ";") > stringr::str_count(download, ","))
+         '\\1\\2'
+       else download,
+       download
+  )
+
 
 # read csv with ; or , separator
 download <- if (ncol(read_csv(download, skip = 1))<=5) read_csv2(download, skip = 1) else read_csv(download, skip = 1)
@@ -307,7 +330,7 @@ if (last_month_not_exist_ridl_gender & last_month_exist_datosabiertos_gender) {
                          identifiability = "anonymized_public"
   )
   
-  r <- resource_create(p$id, m)
+  r <- resource_update('6e53f9fe-a3a5-4277-9e37-3085e506a261', m)
 
 }
 
@@ -335,7 +358,8 @@ if (last_month_not_exist_ridl_country & last_month_exist_datosabiertos_country) 
                          identifiability = "anonymized_public"
   )
   
-  r <- resource_create(p$id, m)
+  r <- resource_update('22e70fa1-efc1-4588-b324-f23f1bac14ee', m)
+
 }
 
 
@@ -363,7 +387,8 @@ if (last_month_not_exist_ridl_age & last_month_exist_datosabiertos_age) {
                          identifiability = "anonymized_public"
   )
   
-  r <- resource_create(p$id, m)
+  r <- resource_update('daa2b9e4-bf97-4302-86a5-08bb62a5a937', m)
+
 }
 
 
