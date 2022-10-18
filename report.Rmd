@@ -98,7 +98,7 @@ download <-
 
 
 # read csv with ; or , separator
-download <- if (ncol(read_csv(download, skip = 1))<=5) read_csv2(download, skip = 2) else read_csv(download, skip = 2)
+download <- if (ncol(read_csv(download, skip = 1))<=5) read_csv2(download, skip = 1) else read_csv(download, skip = 1)
 
 
 df_gender_2022 <- download |> 
